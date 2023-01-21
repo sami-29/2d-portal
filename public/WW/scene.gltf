@@ -1,0 +1,481 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 2974,
+      "max": [
+        0.3908510208129883,
+        0.25756344199180603,
+        0.07147002220153809
+      ],
+      "min": [
+        -0.40017130970954895,
+        0.045267339795827866,
+        -0.5558575391769409
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 35688,
+      "componentType": 5126,
+      "count": 2974,
+      "max": [
+        0.9997886419296265,
+        0.9999824166297913,
+        0.9999990463256836
+      ],
+      "min": [
+        -0.9997885823249817,
+        -0.9999817609786987,
+        -0.9999998211860657
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 2974,
+      "max": [
+        0.6119086742401123,
+        0.5966775417327881
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 17088,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 71376,
+      "componentType": 5126,
+      "count": 18097,
+      "max": [
+        1.65860116481781,
+        1.7835378646850586,
+        2.2258718013763428
+      ],
+      "min": [
+        -1.5559386014938354,
+        -1.8250548839569092,
+        -2.6812727451324463
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 288540,
+      "componentType": 5126,
+      "count": 18097,
+      "max": [
+        0.9999792575836182,
+        0.9999752640724182,
+        0.999931812286377
+      ],
+      "min": [
+        -0.9999905824661255,
+        -0.9999994039535522,
+        -0.9998235702514648
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 23792,
+      "componentType": 5126,
+      "count": 18097,
+      "max": [
+        0.9765474796295166,
+        0.8525000214576721
+      ],
+      "min": [
+        0.0234525203704834,
+        0.0980713963508606
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 68352,
+      "componentType": 5125,
+      "count": 107862,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 505704,
+      "componentType": 5126,
+      "count": 186,
+      "max": [
+        1.486954927444458,
+        0.8778347969055176,
+        1.2345998287200928
+      ],
+      "min": [
+        -1.490894079208374,
+        -0.9289782047271729,
+        -0.28580334782600403
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 507936,
+      "componentType": 5126,
+      "count": 186,
+      "max": [
+        0.998565137386322,
+        1.0,
+        0.9952078461647034
+      ],
+      "min": [
+        -0.9988898634910583,
+        -0.9999990463256836,
+        -0.9951971173286438
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 168568,
+      "componentType": 5126,
+      "count": 186,
+      "max": [
+        1.0000001192092896,
+        1.0000001192092896
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 499800,
+      "componentType": 5125,
+      "count": 1104,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "NxFinity (https://sketchfab.com/NxFinityAnimations)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/walter-white-3d-102d2596c1544cc9933f005360a66144",
+      "title": "Walter White 3D"
+    },
+    "generator": "Sketchfab-13.90.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 504216,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 170056,
+      "byteOffset": 504216,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 510168,
+      "byteOffset": 674272,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 1184440,
+      "uri": "scene.bin"
+    }
+  ],
+  "extensionsUsed": [
+    "KHR_materials_unlit"
+  ],
+  "images": [
+    {
+      "uri": "textures/FBHead_preview_mat_baseColor.png"
+    },
+    {
+      "uri": "textures/Screenshot_1_baseColor.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "Material.001",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.0374096,
+          0.0175616,
+          0.0088621,
+          1.0
+        ],
+        "metallicFactor": 0.0
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "FBHead_preview_mat",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicFactor": 0.0
+      }
+    },
+    {
+      "doubleSided": true,
+      "extensions": {
+        "KHR_materials_unlit": {}
+      },
+      "name": "Screenshot_1",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 1
+        },
+        "metallicFactor": 0.0
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Screenshot (1)_Material.001_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "FBHead_FBHead_preview_mat_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Screenshot (1).001_Screenshot (1)_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 9,
+            "POSITION": 8,
+            "TEXCOORD_0": 10
+          },
+          "indices": 11,
+          "material": 2,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        0.19274047017097473,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.2796981552178866e-17,
+        -0.19274047017097473,
+        0.0,
+        0.0,
+        0.19274047017097473,
+        4.2796981552178866e-17,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.009999999776482582,
+        0.0,
+        0.0,
+        -0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "WalterWhite.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "Object_2"
+    },
+    {
+      "children": [
+        4,
+        6,
+        8
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5
+      ],
+      "name": "Screenshot (1)",
+      "rotation": [
+        2.1855694143368964e-08,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "scale": [
+        327.6855773925781,
+        327.6855773925781,
+        327.6855773925781
+      ],
+      "translation": [
+        -1.7598539590835571,
+        -9.798212051391602,
+        117.82035827636719
+      ]
+    },
+    {
+      "mesh": 0,
+      "name": "Screenshot (1)_Material.001_0"
+    },
+    {
+      "children": [
+        7
+      ],
+      "name": "FBHead",
+      "rotation": [
+        -0.7071068286895752,
+        0.0,
+        0.0,
+        0.7071067094802856
+      ],
+      "scale": [
+        100.0,
+        100.0,
+        100.0
+      ]
+    },
+    {
+      "mesh": 1,
+      "name": "FBHead_FBHead_preview_mat_0"
+    },
+    {
+      "children": [
+        9
+      ],
+      "name": "Screenshot (1).001",
+      "rotation": [
+        2.1855695919725804e-08,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "scale": [
+        7887.908203125,
+        7887.908203125,
+        7887.908203125
+      ],
+      "translation": [
+        13.386252403259277,
+        0.027289986610412598,
+        -3430.49267578125
+      ]
+    },
+    {
+      "mesh": 2,
+      "name": "Screenshot (1).001_Screenshot (1)_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 33071,
+      "wrapT": 33071
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 1,
+      "source": 1
+    }
+  ]
+}
