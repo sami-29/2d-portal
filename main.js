@@ -2,27 +2,46 @@ import * as THREE from "three";
 import { OrbitControls } from "./node_modules/three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "./node_modules/three/examples/jsm/loaders/GLTFLoader.js";
 
+//variables
+const frameWidth = 3,
+  frameHeight = 3,
+  portalScale = 1,
+  scrollSpeed = 0.005,
+  duration = 1000,
+  duration_camera = 1000,
+  endPositionPortal = new THREE.Vector3(0, 0, -1);
+
+let portalZPos = -1,
+  startTime = performance.now();
+
+const endPosition = new THREE.Vector3(0, 0, 6),
+  endTarget = new THREE.Vector3(0, 0, 0);
+
 // initialize the gltf loader
 const loader = new GLTFLoader();
 
 function loadModel(modelObject) {
   let { path, scale } = modelObject;
 
-  loader.load(path, (gltf) => {
-    let model = gltf.scene;
-    model.scale.set(scale, scale, scale);
-    scene.add(model);
-    let box = new THREE.Box3().setFromObject(model);
-    let center = box.getCenter();
-    model.lookAt(center.x, center.y, center.z);
-  });
+  try {
+    loader.load(path, (gltf) => {
+      let model = gltf.scene;
+      model.scale.set(scale, scale, scale);
+      scene.add(model);
+      let box = new THREE.Box3().setFromObject(model);
+      let center = box.getCenter();
+      model.lookAt(center.x, center.y, center.z);
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // Create the scene
-let scene = new THREE.Scene();
+const scene = new THREE.Scene();
 
 // Create the camera
-let camera = new THREE.PerspectiveCamera(
+const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
@@ -32,7 +51,7 @@ camera.position.z = 6;
 
 // Create the renderer
 
-let renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -48,8 +67,7 @@ window.addEventListener("resize", () => {
 });
 
 // Orbit controls
-let controls = new OrbitControls(camera, renderer.domElement);
-controls.save;
+const controls = new OrbitControls(camera, renderer.domElement);
 controls.enabled = false;
 
 // Create the 2D "picture frame" portal
@@ -58,8 +76,7 @@ let portalMaterial = new THREE.MeshBasicMaterial({
   map: new THREE.TextureLoader().load("./Fancy-Frame-Transparent.png"),
   transparent: true,
 });
-
-let portalGeometry = new THREE.PlaneGeometry(3, 3);
+let portalGeometry = new THREE.PlaneGeometry(frameWidth, frameHeight);
 let portal = new THREE.Mesh(portalGeometry, portalMaterial);
 
 // Create the 3D scene
@@ -75,13 +92,6 @@ loadModel({
   path: "./WW/scene.gltf",
   scale: 1,
 });
-
-let portalScale = 1;
-let scrollSpeed = 0.005;
-let portalZPos = -1;
-let startTime = performance.now();
-let duration = 1500;
-let duration_camera = 1500;
 
 portal.scale.set(portalScale, portalScale, portalScale);
 portal.position.z = portalZPos;
@@ -123,8 +133,6 @@ function onEscapeKey(event) {
   }
 }
 
-let endPositionPortal = new THREE.Vector3(0, 0, -1);
-
 function easeInOutCubic(t) {
   if (t < 0.5) {
     return 4 * t * t * t;
@@ -149,9 +157,6 @@ function animate() {
     controls.reset();
   }
 }
-
-let endPosition = new THREE.Vector3(0, 0, 6);
-let endTarget = new THREE.Vector3(0, 0, 0);
 
 function animateCamera() {
   let progress = (performance.now() - startTime) / duration_camera;
@@ -180,5 +185,4 @@ function render() {
 render();
 window.onload = function () {
   console.log("Initial camera position: ", camera.position);
-  console.log(cube.position);
 };
