@@ -118,7 +118,7 @@ let frame = new THREE.Mesh(
   new THREE.PlaneGeometry(targetPlane.width, targetPlane.height, 32),
   new THREE.MeshPhongMaterial({
     color: 0xffffff,
-    map: new THREE.TextureLoader().load("./public/Fancy-Frame-Transparent.png"),
+    map: new THREE.TextureLoader().load("./Fancy-Frame-Transparent.png"),
     transparent: true,
   })
 );
