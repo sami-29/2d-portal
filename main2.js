@@ -156,6 +156,45 @@ const controls = new OrbitControls(camera3D, renderer.domElement);
 controls.enabled = isInPortal;
 
 window.addEventListener("wheel", onScroll);
+window.addEventListener("touchmove", onTouchMove);
+
+let touchStartY;
+
+document.addEventListener("touchstart", (event) => {
+  touchStartY = event.touches[0].clientY;
+});
+
+function onTouchMove(event) {
+  let touchEndY = event.touches[0].clientY;
+  let deltaY = touchEndY - touchStartY;
+
+  if (deltaY > 0) {
+    portalZPos += deltaY * scrollSpeed;
+  } else {
+    portalZPos -= -deltaY * scrollSpeed;
+  }
+  portal.position.z = portalZPos;
+
+  // Clamp the Z position so that it doesn't go too far
+  if (portalZPos >= portalMaxZPos) {
+    portal.position.z = portalMaxZPos;
+    controls.enabled = true;
+    isInPortal = true;
+    camera3D.aspect = window.innerWidth / window.innerHeight;
+    camera3D.updateProjectionMatrix();
+    renderTarget = new THREE.WebGLRenderTarget(
+      window.innerWidth,
+      window.innerHeight
+    );
+    document.removeEventListener("touchmove", onTouchMove);
+    document.addEventListener("keydown", onEscapeKey);
+  }
+  if (portalZPos < -1) {
+    portalZPos = -1;
+    portal.position.z = portalZPos;
+    controls.enabled = false;
+  }
+}
 
 function onScroll(event) {
   if (event.deltaY > 0) {
@@ -221,6 +260,7 @@ function animate() {
     portal.position.z = portalZPos;
     camera3D.aspect = targetPlane.width / targetPlane.height;
     window.addEventListener("wheel", onScroll);
+    window.addEventListener("scroll", onTouchMove);
     controls.reset();
   }
 }

@@ -25,6 +25,7 @@ html:focus-within {
 html,
 body {
   height: 100%;
+  overflow: hidden;
 }
 /* Set core body defaults */
 body {
@@ -66,4 +67,11 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+h1,
+h2 {
+  margin-top: 10px;
+  margin-left: 10px;
+  font-size: xx-large;
 }
