@@ -1,24 +1,32 @@
 import * as THREE from "three";
-import { OrbitControls } from "./node_modules/three/examples/jsm/controls/OrbitControls.js";
-import { GLTFLoader } from "./node_modules/three/examples/jsm/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-//variables
+// Variables
 const frameWidth = 3,
   frameHeight = 3,
   stencilRef = 1,
   portalScale = 1,
   scrollSpeed = 0.005,
-  duration = 1000,
-  duration_camera = 1000,
-  endPositionPortal = new THREE.Vector3(0, 0, -1);
+  duration = 2000,
+  duration_camera = 1500,
+  portalMaxZPos = 5,
+  camera3DposZ = 6;
 
 let portalZPos = -1,
   startTime = performance.now();
 
-const endPosition = new THREE.Vector3(0, 0, 6),
-  endTarget = new THREE.Vector3(0, 0, 0);
+const targetPlane = {
+    width: 4,
+    height: 5,
+  },
+  targetPlanePosition = {
+    x: -5,
+    y: targetPlane.height / 2,
+    z: -1,
+  };
 
-// initialize the gltf loader
+let isInPortal = false;
 
 const loader = new GLTFLoader();
 
@@ -26,25 +34,11 @@ function loadModel(modelObject) {
   let { path, scale, position } = modelObject;
 
   loader.load(path, (gltf) => {
-    gltf.scene.renderOrder = 2;
     let model = gltf.scene;
-    console.log(model);
-
-    model.traverse((object) => {
-      if (object.material) {
-        console.log(object.material);
-        object.material.stencilWrite = true;
-        object.material.stencilRef = stencilRef;
-        object.material.stencilFunc = THREE.AlwaysStencilFunc;
-        object.material.stencilFail = THREE.ReplaceStencilOp;
-        object.material.stencilZFail = THREE.ReplaceStencilOp;
-        object.material.stencilZPass = THREE.ReplaceStencilOp;
-      }
-    });
 
     model.scale.set(scale, scale, scale);
     model.position.set(position.x, position.y, position.z);
-    scene.add(model);
+    scene3D.add(model);
   });
 }
 
@@ -79,22 +73,27 @@ window.addEventListener("resize", () => {
   renderer.render(scene, camera); // -> Also needed
 });
 
-// Orbit controls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.update();
-controls.enabled = false;
+// Create the camera for the 3D world
+let camera3D = new THREE.PerspectiveCamera(
+  75,
+  targetPlane.width / targetPlane.height,
+  0.1,
+  1000
+);
+camera3D.position.z = camera3DposZ;
 
-// Create the 2D "picture frame" portal
-// let portalMaterial = new THREE.MeshBasicMaterial({
-//   color: 0xffffff,
-//   map: new THREE.TextureLoader().load("./Fancy-Frame-Transparent.png"),
-//   transparent: true,
-// });
-// let portalGeometry = new THREE.PlaneGeometry(frameWidth, frameHeight);
-// let portal = new THREE.Mesh(portalGeometry, portalMaterial);
+// Create a separate scene for the 3D world
+let scene3D = new THREE.Scene();
+scene3D.background = new THREE.Color(0xa8def0);
 
+// Create a render target to render the 3D scene onto a texture
+let renderTarget = new THREE.WebGLRenderTarget(
+  targetPlane.width * 512,
+  targetPlane.height * 512
+);
+
+scene3D.add(new THREE.AmbientLight(0xffffff, 0.9));
 scene.add(new THREE.AmbientLight(0xffffff, 0.9));
-
 const dirLight = new THREE.DirectionalLight(0xffffff, 1);
 dirLight.position.set(5, 10, 7.5);
 dirLight.castShadow = true;
@@ -104,63 +103,89 @@ dirLight.shadow.camera.top = 2;
 dirLight.shadow.camera.bottom = -2;
 dirLight.shadow.mapSize.width = 1024;
 dirLight.shadow.mapSize.height = 1024;
-scene.add(dirLight);
+scene3D.add(dirLight);
 
-const portalColor = "black";
-
-const portalGeometry = new THREE.PlaneGeometry(3, 3);
-const portalMaterial = new THREE.MeshBasicMaterial({
-  color: portalColor,
-
-  depthWrite: false,
-  stencilWrite: true,
-  stencilRef: stencilRef,
-  stencilFunc: THREE.AlwaysStencilFunc,
-  stencilFail: THREE.ReplaceStencilOp,
-  stencilZFail: THREE.ReplaceStencilOp,
-  stencilZPass: THREE.ReplaceStencilOp,
-});
-
-const portal = new THREE.Mesh(portalGeometry, portalMaterial);
-scene.add(portal);
-
-// Add the objects to the scene
-scene.add(portal);
+// Create a quad to display the texture on
+let quad = new THREE.Mesh(
+  new THREE.PlaneGeometry(targetPlane.width, targetPlane.height, 32),
+  new THREE.MeshPhongMaterial({
+    map: renderTarget.texture,
+  })
+);
+quad.position.z = portalZPos;
 
 const coneGeometry = new THREE.ConeGeometry(1, 2, 3);
 
 // Create the cone's material
 const coneMaterial = new THREE.MeshLambertMaterial({
-  color: "red",
-  stencilWrite: "true",
-  stencilRef: stencilRef,
-  stencilFunc: THREE.EqualStencilFunc,
-  stencilFail: THREE.ReplaceStencilOp,
-  stencilZFail: THREE.ReplaceStencilOp,
-  stencilZPass: THREE.ReplaceStencilOp,
+  color: "white",
 });
-console.log(coneMaterial);
+
 // Create the cone mesh
 const cone = new THREE.Mesh(coneGeometry, coneMaterial);
 
-// Position the cone
-cone.position.set(0, 2, -2);
-cone.scale.set(0.5, 0.5, 0.5);
-
 // Add the cone to the scene
-scene.add(cone);
+scene3D.add(cone);
+
+// Add the 3D world and portal to the main scene
+const portal = new THREE.Group();
+
+// portal.add(frame); // Commented out to remove the frame
+portal.add(quad);
+portal.position.z = portalZPos;
+
+scene.add(portal);
+scene.add(camera3D);
 
 loadModel({
   path: "./shiba/scene.gltf",
   scale: 1,
-  position: { x: 0, y: 3, z: -2 },
+  position: { x: 15, y: 3, z: -2 },
 });
 
-portal.scale.set(portalScale, portalScale, portalScale);
-portal.position.z = portalZPos;
+const controls = new OrbitControls(camera3D, renderer.domElement);
+controls.enabled = isInPortal;
 
-// Add event listener for scroll
 window.addEventListener("wheel", onScroll);
+window.addEventListener("touchmove", onTouchMove);
+
+let touchStartY;
+
+document.addEventListener("touchstart", (event) => {
+  touchStartY = event.touches[0].clientY;
+});
+
+function onTouchMove(event) {
+  let touchEndY = event.touches[0].clientY;
+  let deltaY = touchEndY - touchStartY;
+
+  if (deltaY > 0) {
+    portalZPos += deltaY * scrollSpeed;
+  } else {
+    portalZPos -= -deltaY * scrollSpeed;
+  }
+  portal.position.z = portalZPos;
+
+  // Clamp the Z position so that it doesn't go too far
+  if (portalZPos >= portalMaxZPos) {
+    portal.position.z = portalMaxZPos;
+    controls.enabled = true;
+    isInPortal = true;
+    camera3D.aspect = window.innerWidth / window.innerHeight;
+    camera3D.updateProjectionMatrix();
+    renderTarget = new THREE.WebGLRenderTarget(
+      window.innerWidth,
+      window.innerHeight
+    );
+    document.removeEventListener("touchmove", onTouchMove);
+    document.addEventListener("keydown", onEscapeKey);
+  }
+  if (portalZPos < -1) {
+    portalZPos = -1;
+    portal.position.z = portalZPos;
+    controls.enabled = false;
+  }
+}
 
 function onScroll(event) {
   if (event.deltaY > 0) {
@@ -171,12 +196,16 @@ function onScroll(event) {
   portal.position.z = portalZPos;
 
   // Clamp the Z position so that it doesn't go too far
-  if (portalZPos >= 6) {
-    portal.position.z = portalZPos;
+  if (portalZPos >= portalMaxZPos) {
+    portal.position.z = portalMaxZPos;
     controls.enabled = true;
-    portal.visible = false;
-    renderer.setClearColor(portalColor);
-    coneMaterial.stencilWrite = false;
+    isInPortal = true;
+    camera3D.aspect = window.innerWidth / window.innerHeight;
+    camera3D.updateProjectionMatrix();
+    renderTarget = new THREE.WebGLRenderTarget(
+      window.innerWidth,
+      window.innerHeight
+    );
     window.removeEventListener("wheel", onScroll);
     window.addEventListener("keydown", onEscapeKey);
   }
@@ -184,7 +213,6 @@ function onScroll(event) {
     portalZPos = -1;
     portal.position.z = portalZPos;
     controls.enabled = false;
-    portal.visible = true;
   }
 }
 
@@ -206,6 +234,10 @@ function easeInOutCubic(t) {
   }
 }
 
+const endPositionPortal = new THREE.Vector3(0, 0, -1);
+const endPosition = new THREE.Vector3(0, 0, camera3DposZ),
+  endTarget = new THREE.Vector3(0, 0, 0);
+
 function animate() {
   let time = performance.now() - startTime;
   let progress = time / duration;
@@ -214,15 +246,12 @@ function animate() {
   portal.position.lerp(endPositionPortal, ease);
 
   if (progress < 1) {
-    if (progress > 0.2) {
-      coneMaterial.stencilWrite = true;
-      renderer.setClearColor(0xffffff);
-    }
     requestAnimationFrame(animate);
   } else {
-    portal.position.z = -1;
+    portal.position.z = portalZPos;
+    camera3D.aspect = targetPlane.width / targetPlane.height;
     window.addEventListener("wheel", onScroll);
-
+    window.addEventListener("scroll", onTouchMove);
     controls.reset();
   }
 }
@@ -232,25 +261,37 @@ function animateCamera() {
   progress = Math.min(progress, 1);
 
   let ease = easeInOutCubic(progress);
-  camera.position.lerp(endPosition, ease);
-  camera.lookAt(endTarget);
+  camera3D.position.lerp(endPosition, ease);
+  camera3D.lookAt(endTarget);
 
   if (progress < 1) {
     requestAnimationFrame(animateCamera);
   } else {
-    // animation is complete, start the next animation
-    portal.visible = true;
+    // Animation is complete, start the next animation
+    isInPortal = false;
     startTime = performance.now();
     requestAnimationFrame(animate);
   }
 }
 
-// Render the scene
-function render() {
-  requestAnimationFrame(render);
-  renderer.clearStencil();
+// Update function that will be called on every frame
+function update() {
+  // Render the 3D scene onto the render target
+  renderer.setRenderTarget(renderTarget);
+  renderer.render(scene3D, camera3D);
+  renderer.setRenderTarget(null);
 
-  renderer.render(scene, camera);
+  // Render the main scene
+
+  if (isInPortal) {
+    renderer.render(scene3D, camera3D);
+    controls.update();
+    portalZPos = -1;
+  } else {
+    renderer.render(scene, camera);
+  }
+
+  requestAnimationFrame(update);
 }
-render();
-window.onload = function () {};
+
+update();
